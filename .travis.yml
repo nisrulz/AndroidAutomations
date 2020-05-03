@@ -2,13 +2,58 @@ language: minimal
 os: linux
 dist: xenial
 
-# Only run travis on branches that meet the below patterns
+# Don't run Travis if the branch name matches below pattern
 branches:
-  only:
-    - master
-    - develop
-    # Commits pushed to branches with 'testing/' in their name are run on travis
-    - /^testing\/.*/
+  except:
+    - /^docs\/.*/
 
 git:
   depth: false
+  quiet: true
+
+# Define Environment Variables
+env:
+  global:
+    # for updates check developer.android.com/studio#downloads
+    - ANDROID_SDK_TOOLS=commandlinetools-linux-6200805_latest.zip
+    - ANDROID_SDK_VERS=29
+    - ANDROID_BUILD_TOOLS_VERS=29.0.3
+
+before_install:
+  # Set JAVA_HOME path
+  - export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+  # Download and unzip Android SDK command line tools
+  - wget -nv https://dl.google.com/android/repository/$ANDROID_SDK_TOOLS
+  - unzip -q -n $ANDROID_SDK_TOOLS -d $HOME/sdk
+  # Set SDK tools path variable and ANDROID_HOME
+  - export PATH=$PATH:$HOME/sdk/tools/bin
+  - export ANDROID_HOME=$HOME/sdk
+  # Create empty cfg file to prevent sdkmanager warning message
+  - mkdir -p $HOME/.android && touch $HOME/.android/repositories.cfg
+
+install:
+  - yes | "${ANDROID_HOME}/tools/bin/sdkmanager" --sdk_root=${ANDROID_HOME} "platforms;android-${ANDROID_SDK_VERS}" > /dev/null
+  - yes | "${ANDROID_HOME}/tools/bin/sdkmanager" --sdk_root=${ANDROID_HOME} "build-tools;${ANDROID_BUILD_TOOLS_VERS}" > /dev/null
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -rf $HOME/.gradle/caches/*/plugin-resolution/
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - .gradle
+    - $HOME/.android/build-cache
+    - $HOME/.m2/repository
+    - $HOME/sdk
+
+before_script:
+  - chmod +x gradlew
+  - mkdir -p $HOME/.gradle
+  - echo "org.gradle.daemon=false" >> $HOME/.gradle/gradle.properties
+  - echo "org.gradle.console=plain" >> $HOME/.gradle/gradle.properties
+
+script:
+  - ./gradlew build test
+  
