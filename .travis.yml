@@ -1,0 +1,14 @@
+language: minimal
+os: linux
+dist: xenial
+
+# Only run travis on branches that meet the below patterns
+branches:
+  only:
+    - master
+    - develop
+    # Commits pushed to branches with 'testing/' in their name are run on travis
+    - /^testing\/.*/
+
+git:
+  depth: false
