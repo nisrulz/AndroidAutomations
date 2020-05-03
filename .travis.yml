@@ -2,6 +2,7 @@ language: minimal
 os: linux
 dist: xenial
 
+# --------------------------------- Travis ----------------------------------
 notifications:
   email: false
 
@@ -14,7 +15,7 @@ git:
   depth: false
   quiet: true
 
-# Define Environment Variables
+# --------------------------------- ENV ----------------------------------
 env:
   global:
     # for updates check developer.android.com/studio#downloads
@@ -22,6 +23,7 @@ env:
     - ANDROID_SDK_VERS=29
     - ANDROID_BUILD_TOOLS_VERS=29.0.3
 
+# --------------------------------- Install ----------------------------------
 before_install:
   # Set JAVA_HOME path
   - export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
@@ -38,6 +40,7 @@ install:
   - yes | "${ANDROID_HOME}/tools/bin/sdkmanager" --sdk_root=${ANDROID_HOME} "platforms;android-${ANDROID_SDK_VERS}" > /dev/null
   - yes | "${ANDROID_HOME}/tools/bin/sdkmanager" --sdk_root=${ANDROID_HOME} "build-tools;${ANDROID_BUILD_TOOLS_VERS}" > /dev/null
 
+# --------------------------------- Cache ----------------------------------
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -rf $HOME/.gradle/caches/*/plugin-resolution/
@@ -51,12 +54,19 @@ cache:
     - $HOME/.m2/repository
     - $HOME/sdk
 
+# --------------------------------- Script ----------------------------------
 before_script:
+  # Make scripts and gradlew executable
   - chmod +x gradlew
+  - chmod +x ./travis/run_on_master.sh
+  - chmod +x ./travis/run_on_pull_requests.sh
+  - chmod +x ./travis/run_on_non_pull_requests.sh
+  # Setup gradle.properties
   - mkdir -p $HOME/.gradle
   - echo "org.gradle.daemon=false" >> $HOME/.gradle/gradle.properties
   - echo "org.gradle.console=plain" >> $HOME/.gradle/gradle.properties
 
 script:
-  - ./gradlew build test
-  
+  - 'if [ $TRAVIS_BRANCH == "master" ]; then bash ./travis/run_on_master; fi'
+  - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then bash ./travis/run_on_pull_requests; fi'
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then bash ./travis/run_on_non_pull_requests; fi'
