@@ -67,9 +67,18 @@ before_script:
   - echo "org.gradle.console=plain" >> $HOME/.gradle/gradle.properties
 
 script:
-  - 'if [ $TRAVIS_BRANCH == "master" ]; then bash ./travis/run_on_master.sh; fi'
-  - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then bash ./travis/run_on_pull_requests.sh; fi'
-  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then bash ./travis/run_on_non_pull_requests.sh; fi'
+  - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]
+    then
+      bash ./travis/run_on_pull_requests.sh
+    elif [ "$TRAVIS_BRANCH" == "master" ]
+    then
+      bash ./travis/run_on_master.sh
+    elif [ "$TRAVIS_PULL_REQUEST" = "false" ]
+    then
+      bash ./travis/run_on_non_pull_requests.sh
+    else
+      echo "No matching script!"
+    fi'
 
 # ------------------------ Deploy to Github Releases ------------------------
 deploy:
