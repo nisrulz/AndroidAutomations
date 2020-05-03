@@ -67,9 +67,9 @@ before_script:
   - echo "org.gradle.console=plain" >> $HOME/.gradle/gradle.properties
 
 script:
-  - 'if [ $TRAVIS_BRANCH == "master" ]; then bash ./travis/run_on_master; fi'
-  - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then bash ./travis/run_on_pull_requests; fi'
-  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then bash ./travis/run_on_non_pull_requests; fi'
+  - 'if [ $TRAVIS_BRANCH == "master" ]; then bash ./travis/run_on_master.sh; fi'
+  - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then bash ./travis/run_on_pull_requests.sh; fi'
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then bash ./travis/run_on_non_pull_requests.sh; fi'
 
 # ------------------------ Deploy to Github Releases ------------------------
 deploy:
