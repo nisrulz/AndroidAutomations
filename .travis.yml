@@ -2,6 +2,9 @@ language: minimal
 os: linux
 dist: xenial
 
+notifications:
+  email: false
+
 # Don't run Travis if the branch name matches below pattern
 branches:
   except:
