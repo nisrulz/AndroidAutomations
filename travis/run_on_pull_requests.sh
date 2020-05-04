@@ -2,4 +2,4 @@
 
 echo "Executing for pull request"
 
-./gradlew test
+./gradlew -q test

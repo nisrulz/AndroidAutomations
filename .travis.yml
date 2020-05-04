@@ -25,6 +25,7 @@ env:
 
 # --------------------------------- Install ----------------------------------
 before_install:
+  - openssl aes-256-cbc -K $encrypted_48536eba9c94_key -iv $encrypted_48536eba9c94_iv -in ./keystore/keystore.jks.enc -out ./keystore/keystore.jks -d
   # Set JAVA_HOME path
   - export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
   # Download and unzip Android SDK command line tools
@@ -58,9 +59,11 @@ cache:
 before_script:
   # Make scripts and gradlew executable
   - chmod +x gradlew
-  - chmod +x ./travis/run_on_master.sh
-  - chmod +x ./travis/run_on_pull_requests.sh
-  - chmod +x ./travis/run_on_non_pull_requests.sh
+  - chmod +x ./travis/*
+  # Setup signing config
+  - echo "storePassword=$storePassword" >> ./keystore/keystore.properties
+  - echo "keyAlias=$keyAlias" >> ./keystore/keystore.properties
+  - echo "keyPassword=$keyPassword" >> ./keystore/keystore.properties
   # Setup gradle.properties
   - mkdir -p $HOME/.gradle
   - echo "org.gradle.daemon=false" >> $HOME/.gradle/gradle.properties
@@ -75,13 +78,17 @@ script:
   - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then bash ./travis/run_on_non_pull_requests.sh; fi'
 
 # ------------------------ Deploy to Github Releases ------------------------
+before_deploy:
+  - cd app/build/outputs/apk/
+
 deploy:
   provider: releases
   skip_cleanup: true
   overwrite: true
-  api_key: "$GITHUB_OAUTH_TOKEN"
+  api_key:
+    secure: "Q9IQZj0AXqSJP8mTCzutMQbeZIUB0iSXgfJuOowZaesot2nt4rL1vZjUPewmn+uTnM7JW8zS0+3c54WnUiHknYnMMaN8jezZHzgZvoGjA+Tg1qXW7+5TqTTiMTZ0F2+/iXzwrDyd/WNhPmcSBK1IhvTCM/twL4CRNvuaaoePENlgEdJe4ApC+wTs3t3WiEsrx8W+yIgHJn80g8HXx1f/+Wb2JQ9RFEf+2GIDMibAY89Bk/d8E9+ptD4Xaf7cHMHDfM4MZY/bMc3kgZkbFFewi7F9XG0HDI8D6DDOPFP6H7e18RVPaqqSxLS2d2+3XcRIjX0DdOpM6mnezwzRQ0KZTna8aVky+gPOJRtKNvaWOm/FAtKYTzWIr7EMxcu3YkrNG1W2/AlC8IFg27FVaAGrj2EmroEbVpFD9a4eO3RRnelqhhlShsy0C2k/xLySG/cmejnptf4TsxmWOsCHzzYWcjxu6LcnfM6d3Yf2CiQAbAMu8iloONNBMSfgVOI71IFPKyhrUJbfaUIg6c55ZQRbkXhBA7FD5mWVEo4vKgZo+nSA3yqoaQLytTFE0OTDCfcD12SKO1BdPuJGd1RVTt39J5MbCqShZkusiGeQxXF2clZJMkQ9lF6mLr1t4S4x/XGUfFyf/42H330Bjt5dboySDaygXCFOvPDyFZYa5/js7ZY="
   file_glob: true
-  file: /home/travis/build/nisrulz/AndroidAutomations/app/build/outputs/apk/release/*
+  file: release/app-release.apk
   on:
     repo: nisrulz/AndroidAutomations
     tags: true

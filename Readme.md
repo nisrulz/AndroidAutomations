@@ -1,6 +1,6 @@
 # Android Automations
 
-An android example app repository to demonstrate various automations possible.
+An android example app repository to demonstrate various automations possible via using Travis CI.
 
 ### Contribute
 
