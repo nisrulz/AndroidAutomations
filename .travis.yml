@@ -59,9 +59,11 @@ cache:
 before_script:
   # Make scripts and gradlew executable
   - chmod +x gradlew
-  - chmod +x ./travis/run_on_master.sh
-  - chmod +x ./travis/run_on_pull_requests.sh
-  - chmod +x ./travis/run_on_non_pull_requests.sh
+  - chmod +x ./travis/*
+  # Setup signing config
+  - echo "storePassword=$storePassword" >> ./keystore/keystore.properties
+  - echo "keyAlias=$keyAlias" >> ./keystore/keystore.properties
+  - echo "keyPassword=$keyPassword" >> ./keystore/keystore.properties
   # Setup gradle.properties
   - mkdir -p $HOME/.gradle
   - echo "org.gradle.daemon=false" >> $HOME/.gradle/gradle.properties
@@ -77,9 +79,6 @@ script:
 
 # ------------------------ Deploy to Github Releases ------------------------
 before_deploy:
-  - echo "storePassword=$storePassword" >> ./keystore/keystore.properties
-  - echo "keyAlias=$keyAlias" >> ./keystore/keystore.properties
-  - echo "keyPassword=$keyPassword" >> ./keystore/keystore.properties
   - cd app/build/outputs/apk/
 
 deploy:

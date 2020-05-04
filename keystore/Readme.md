@@ -38,7 +38,8 @@ keyPassword=example
 These are then used during the build time to write to `keystore/keystore.properties` file, which in turn is used to build a signed apk via `build.gradle` setup.
 
 ```yaml
-before_deploy:
+before_script:
+  # Setup signing config
   - echo "storePassword=$storePassword" >> ./keystore/keystore.properties
   - echo "keyAlias=$keyAlias" >> ./keystore/keystore.properties
   - echo "keyPassword=$keyPassword" >> ./keystore/keystore.properties
