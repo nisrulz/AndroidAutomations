@@ -69,13 +69,29 @@ before_script:
   - echo "org.gradle.daemon=false" >> $HOME/.gradle/gradle.properties
   - echo "org.gradle.console=plain" >> $HOME/.gradle/gradle.properties
 
-script:
-  # If the branch is pull request
-  - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then bash ./travis/run_on_pull_requests.sh; fi'
-  # If the branch is master
-  - 'if [ "$TRAVIS_BRANCH" == "master" ]; then bash ./travis/run_on_master.sh; fi'
-  # If the branch is not a pull request
-  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then bash ./travis/run_on_non_pull_requests.sh; fi'
+stages:
+  - name: test
+    if: type = pull_request
+  - name: build
+    if: type = pull_request
+  - name: deploy
+    if: (branch = master AND tag IS present) AND type != pull_request
+
+jobs:
+  fast_finish: true
+  include:
+    - stage: test
+      name: 'Unit Tests'
+      script:
+        - ./gradlew -q test
+    - stage: build
+      name: 'Build'
+      script:
+        - ./gradlew -q build
+    - stage: deploy
+      name: 'Deploy App'
+      script:
+        - ./gradlew -q assembleRelease
 
 # ------------------------ Deploy to Github Releases ------------------------
 before_deploy:
