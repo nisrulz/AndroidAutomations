@@ -25,6 +25,8 @@ env:
 
 # --------------------------------- Install ----------------------------------
 before_install:
+  - openssl aes-256-cbc -K $encrypted_48536eba9c94_key -iv $encrypted_48536eba9c94_iv
+    -in keystore.jks.enc -out ./keystore.jks -d
   # Set JAVA_HOME path
   - export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
   # Download and unzip Android SDK command line tools
@@ -76,6 +78,9 @@ script:
 
 # ------------------------ Deploy to Github Releases ------------------------
 before_deploy:
+  - echo "storePassword=$storePassword" >> ./keystore/keystore.properties
+  - echo "keyAlias=$keyAlias" >> ./keystore/keystore.properties
+  - echo "keyPassword=$keyPassword" >> ./keystore/keystore.properties
   - cd app/build/outputs/apk/
 
 deploy:
