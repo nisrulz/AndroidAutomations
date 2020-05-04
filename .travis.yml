@@ -69,9 +69,7 @@ before_script:
   - echo "org.gradle.console=plain" >> $HOME/.gradle/gradle.properties
 
 stages:
-  - name: test
-    if: type = pull_request
-  - name: build
+  - name: test_and_build
     if: type = pull_request
   - name: deploy
     if: (branch = master AND tag IS present) AND type != pull_request
@@ -79,14 +77,10 @@ stages:
 jobs:
   fast_finish: true
   include:
-    - stage: test
-      name: 'Unit Tests'
+    - stage: test_and_build
+      name: 'Unit Tests && Build'
       script:
-        - ./gradlew -q test
-    - stage: build
-      name: 'Build'
-      script:
-        - ./gradlew -q build
+        - ./gradlew -q build test
     - stage: deploy
       name: 'Deploy App'
       script:
