@@ -1,5 +1,7 @@
 # Android Automations
 
+Build Status: [![Build Status](https://travis-ci.org/nisrulz/AndroidAutomations.svg?branch=master)](https://travis-ci.org/nisrulz/AndroidAutomations)
+
 An android example app repository to demonstrate various automations possible via using Travis CI.
 
 ### Contribute
