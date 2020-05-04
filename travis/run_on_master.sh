@@ -2,4 +2,4 @@
 
 echo "Executing for master branch"
 
-./gradlew clean build assembleRelease
+./gradlew -q clean build assembleRelease
