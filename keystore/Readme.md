@@ -45,10 +45,10 @@ before_script:
   - echo "keyPassword=$keyPassword" >> ./keystore/keystore.properties
 ```
 
-Before you can deploy, you need to get the encrypted apikey.
+Before you can deploy, you need to get the encrypted apikey. Execute the below command (with required info), paste the genearted Github Oauth key and press Ctrl+D to get the encrypted key.
 
 ```bash
-travis encrypt apikey
+travis encrypt -r username/repo_name --org
 ```
 
 Next, to deploy to Github release:
