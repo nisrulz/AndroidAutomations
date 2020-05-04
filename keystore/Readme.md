@@ -15,7 +15,7 @@ travis login --github-token your_github_oauth_token
 Encrypt the keystore file:
 
 ```bash
-travis encrypt-file ./keystore.jks --add
+travis encrypt-file ./keystore.jks
 ```
 
 This will generate a `keystore.jks.enc` file. You should remove the `keystore.jks` from the repo, but keep it safe.
@@ -24,8 +24,7 @@ Now, add the output line to `before_install` block in travis config:
 
 ```yaml
 before_install:
-  - openssl aes-256-cbc -K $encrypted_48536eba9c94_key -iv $encrypted_48536eba9c94_iv
-    -in keystore.jks.enc -out ./keystore.jks -d
+  - openssl aes-256-cbc -K $encrypted_48536eba9c94_key -iv $encrypted_48536eba9c94_iv -in ./keystore/keystore.jks.enc -out ./keystore/keystore.jks -d
 ```
 
 Next, the keystore password and key password need to be added to the travis config. To do that navigate to settings and under **Environment Variables**, define below key-value pair

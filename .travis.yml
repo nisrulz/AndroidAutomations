@@ -25,8 +25,7 @@ env:
 
 # --------------------------------- Install ----------------------------------
 before_install:
-  - openssl aes-256-cbc -K $encrypted_48536eba9c94_key -iv $encrypted_48536eba9c94_iv
-    -in keystore.jks.enc -out ./keystore.jks -d
+  - openssl aes-256-cbc -K $encrypted_48536eba9c94_key -iv $encrypted_48536eba9c94_iv -in ./keystore/keystore.jks.enc -out ./keystore/keystore.jks -d
   # Set JAVA_HOME path
   - export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
   # Download and unzip Android SDK command line tools
@@ -87,7 +86,8 @@ deploy:
   provider: releases
   skip_cleanup: true
   overwrite: true
-  api_key: "$GITHUB_OAUTH_TOKEN"
+  api_key:
+    secure: "fyhdiJMetWFs9PpLEHhfh7MnwOgfst2/JZLkgbgwxoQHNBrWIP2EEjigASooCaN3SDuH2iyQvnfbugo0/WxRNe1jxNIF+ouijhfL0xzJFxT7fGRslNIHMc0AjbOON5ZedXcBPswtSCqYsWbCe+sU+i7R9WZ9ysOor7oP+3OuovXSPkEh7vqAGDumB5O/E6+HeD3EPgYdbvpav4nv7n2MO03rOCMmzfIRTaIPVDsE+KlPh76uOwI6D0I8jmP9g+eTq/MRjcOJ2H/T3T/D4Q1JUeDzbKKBcfSrmEjoXB15d0oCfZM6c+ir6p1vveMNPqsD9sqOF0AkJ0wBgWAtjjJhw0JpQnh+Z+iusJtpY6u7P4WstXf169TGI6LkljLODG/89lgLEVqQ1f0wE3kl6Vl8197IezspI9YqNjcUUziDUKJuo932NKFBA8AjBJGJurR1yDz7TNFvlE3EK7moj5hV1EoG1WMw7Fcg3daOoQxRr7dRFshcTHNaGzMyL9sazPKtuvYk5x983m+JaBRn1HVkhV0p9QF3NyPjHbu3hAqu6167bxsnGGKsVkvPeGnLCqBh2e1S8JyRNe/e7sHIRE+VtZyQatChGETHgx1h3uxd2ls8EaMKNXhCo905HWRu0O9DV0XGCqfdgyxqbMv7h0J6WNiJ5DIxJCcfYe3GFSDPKTo="
   file_glob: true
   file: release/*
   on:
