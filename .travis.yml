@@ -78,11 +78,11 @@ jobs:
   fast_finish: true
   include:
     - stage: test_and_build
-      name: 'Unit Tests && Build'
+      name: 'Building codebase and running unit tests'
       script:
         - ./gradlew -q build test
     - stage: deploy
-      name: 'Deploy App'
+      name: 'Assemble release APK'
       script:
         - ./gradlew -q assembleRelease
 
