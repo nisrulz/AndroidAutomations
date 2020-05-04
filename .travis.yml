@@ -59,7 +59,6 @@ cache:
 before_script:
   # Make scripts and gradlew executable
   - chmod +x gradlew
-  - chmod +x ./travis/*
   # Setup signing config
   - echo "storePassword=$storePassword" >> ./keystore/keystore.properties
   - echo "keyAlias=$keyAlias" >> ./keystore/keystore.properties
