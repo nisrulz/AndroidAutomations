@@ -70,7 +70,7 @@ before_script:
 
 stages:
   - name: test_and_build
-    if: type = pull_request
+    if: (type = pull_request) OR (branch = master)
   - name: deploy
     if: (tag IS present) AND (type != pull_request)
 
