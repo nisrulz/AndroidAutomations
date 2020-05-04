@@ -88,7 +88,7 @@ deploy:
   api_key:
     secure: "Q9IQZj0AXqSJP8mTCzutMQbeZIUB0iSXgfJuOowZaesot2nt4rL1vZjUPewmn+uTnM7JW8zS0+3c54WnUiHknYnMMaN8jezZHzgZvoGjA+Tg1qXW7+5TqTTiMTZ0F2+/iXzwrDyd/WNhPmcSBK1IhvTCM/twL4CRNvuaaoePENlgEdJe4ApC+wTs3t3WiEsrx8W+yIgHJn80g8HXx1f/+Wb2JQ9RFEf+2GIDMibAY89Bk/d8E9+ptD4Xaf7cHMHDfM4MZY/bMc3kgZkbFFewi7F9XG0HDI8D6DDOPFP6H7e18RVPaqqSxLS2d2+3XcRIjX0DdOpM6mnezwzRQ0KZTna8aVky+gPOJRtKNvaWOm/FAtKYTzWIr7EMxcu3YkrNG1W2/AlC8IFg27FVaAGrj2EmroEbVpFD9a4eO3RRnelqhhlShsy0C2k/xLySG/cmejnptf4TsxmWOsCHzzYWcjxu6LcnfM6d3Yf2CiQAbAMu8iloONNBMSfgVOI71IFPKyhrUJbfaUIg6c55ZQRbkXhBA7FD5mWVEo4vKgZo+nSA3yqoaQLytTFE0OTDCfcD12SKO1BdPuJGd1RVTt39J5MbCqShZkusiGeQxXF2clZJMkQ9lF6mLr1t4S4x/XGUfFyf/42H330Bjt5dboySDaygXCFOvPDyFZYa5/js7ZY="
   file_glob: true
-  file: release/*
+  file: release/app-release.apk
   on:
     repo: nisrulz/AndroidAutomations
     tags: true
