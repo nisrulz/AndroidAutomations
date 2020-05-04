@@ -2,4 +2,4 @@
 
 echo "Executing for non-pull request i.e branch"
 
-# Do nothing
+./gradlew clean build assembleRelease
