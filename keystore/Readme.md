@@ -64,7 +64,7 @@ deploy:
   api_key:
     secure: replace_with_encrypted_apikey_from_last_step
   file_glob: true
-  file: release/*
+  file: release/app-release.apk
   on:
     repo: nisrulz/AndroidAutomations
     tags: true
