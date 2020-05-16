@@ -6,10 +6,12 @@ dist: xenial
 notifications:
   email: false
 
-# Don't run Travis if the branch name matches below pattern
+
 branches:
-  except:
-    - /^docs\/.*/
+  # Ensures when "Build pushed branches is enabled" in Travis setting, then only the below branches will execute the build
+  # Note: When "Build pushed pull requests" is enabled then all open PR are built with every commit pushed.
+  only:
+    - master
 
 git:
   depth: false
@@ -70,7 +72,6 @@ before_script:
 
 stages:
   - name: test_and_build
-    if: (type = pull_request) OR (branch = master)
   - name: deploy
     if: (tag IS present) AND (type != pull_request)
 
