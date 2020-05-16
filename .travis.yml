@@ -6,12 +6,12 @@ dist: xenial
 notifications:
   email: false
 
-
 branches:
   # Ensures when "Build pushed branches is enabled" in Travis setting, then only the below branches will execute the build
   # Note: When "Build pushed pull requests" is enabled then all open PR are built with every commit pushed.
   only:
     - master
+    - develop
 
 git:
   depth: false
@@ -73,17 +73,17 @@ before_script:
 stages:
   - name: test_and_build
   - name: deploy
-    if: (tag IS present) AND (type != pull_request)
+    if: (type != pull_request) AND (branch = master) AND (tag IS present)
 
 jobs:
   fast_finish: true
   include:
     - stage: test_and_build
-      name: 'Building codebase and running unit tests'
+      name: "Building codebase and running unit tests"
       script:
         - ./gradlew -q build test
     - stage: deploy
-      name: 'Assemble release APK'
+      name: "Assemble release APK"
       script:
         - ./gradlew -q assembleRelease
 
