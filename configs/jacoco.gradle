@@ -105,4 +105,9 @@ task jacocoFullReport(type: JacocoReport, group: 'Coverage reports') {
         //noinspection GroovyAssignabilityCheck
         executionData.setFrom files(executionData.findAll { it.exists() })
     }
+
+    // Print the location of reports at the end
+    doLast {
+        println("Reports generated at ${rootProject.buildDir}/reports/jacoco/jacocoFullReport")
+    }
 }
