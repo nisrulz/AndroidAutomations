@@ -41,8 +41,11 @@ subprojects {
 // configure() method takes a list as an argument and applies the configuration to the projects in this list.
 configure(subprojects) { subproject ->
 
+    final buildTypeName = "debug"
+    final testTask = "test${buildTypeName.capitalize()}UnitTest"
+
     // Task to generate Jacoco report, depends on testDebugUnitTest task
-    task jacocoReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
+    task jacocoReport(type: JacocoReport, dependsOn: testTask) {
         group = "Reporting"
         description = "Generate Jacoco coverage reports."
 
@@ -57,14 +60,14 @@ configure(subprojects) { subproject ->
         ]
 
         // Collect class files
-        final kotlinClassTree = "/tmp/kotlin-classes/"
-        final javaClassTree = "/intermediates/javac/"
+        final kotlinClassTree = "/tmp/kotlin-classes/$buildTypeName/**"
+        final javaClassTree = "/intermediates/javac/$buildTypeName/**"
         final combinedClassTree = fileTree(dir: "${subproject.buildDir}", excludes: fileFilter, includes: [javaClassTree, kotlinClassTree])
         classDirectories.setFrom files(combinedClassTree)
 
         // Collect source files
-        final kotlinSrc = "/src/main/kotlin"
-        final javaSrc = "/src/main/java"
+        final kotlinSrc = "/src/main/kotlin/**"
+        final javaSrc = "/src/main/java/**"
         final combinedSrc = fileTree(dir: "${subproject.buildDir}", excludes: fileFilter, includes: [javaSrc, kotlinSrc])
         sourceDirectories.setFrom files(combinedSrc)
 
