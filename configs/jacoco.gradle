@@ -1,0 +1,113 @@
+buildscript {
+    ext.jacoco_version = "0.8.5"
+
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        // Jacoco
+        classpath "org.jacoco:org.jacoco.core:${jacoco_version}"
+    }
+}
+
+// Apply to every module
+allprojects {
+    // Apply jacoco plugin
+    apply plugin: 'jacoco'
+    // Set Jacoco version
+    jacoco {
+        toolVersion = "${jacoco_version}"
+    }
+
+    tasks.withType(Test) {
+        jacoco.includeNoLocationClasses = true
+    }
+}
+
+subprojects {
+    afterEvaluate {
+        android {
+            buildTypes {
+                debug {
+                    // Should run on only CI
+                    testCoverageEnabled = true
+                }
+            }
+        }
+    }
+}
+
+// configure() method takes a list as an argument and applies the configuration to the projects in this list.
+configure(subprojects) { subproject ->
+
+    final buildTypeName = "debug"
+    final testTask = "test${buildTypeName.capitalize()}UnitTest"
+
+    // Task to generate Jacoco report, depends on testDebugUnitTest task
+    task jacocoReport(type: JacocoReport, dependsOn: testTask) {
+        group = "Reporting"
+        description = "Generate Jacoco coverage reports."
+
+        // Define what to exclude from coverage report
+        // UI, "noise", generated classes, platform classes, etc.
+        final fileFilter = [
+                '**/R.*',
+                '**/R$*.*',
+                '**/BuildConfig.*',
+                '**/Manifest*.*',
+                'android/**/*.*'
+        ]
+
+        // Collect class files
+        final kotlinClassTree = "/tmp/kotlin-classes/$buildTypeName/**"
+        final javaClassTree = "/intermediates/javac/$buildTypeName/**"
+        final combinedClassTree = fileTree(dir: "${subproject.buildDir}", excludes: fileFilter, includes: [javaClassTree, kotlinClassTree])
+        classDirectories.setFrom files(combinedClassTree)
+
+        // Collect source files
+        final kotlinSrc = "/src/main/kotlin/**"
+        final javaSrc = "/src/main/java/**"
+        final combinedSrc = fileTree(dir: "${subproject.buildDir}", excludes: fileFilter, includes: [javaSrc, kotlinSrc])
+        sourceDirectories.setFrom files(combinedSrc)
+
+        // Collect all *.exec files
+        executionData.setFrom fileTree(subproject.buildDir).include("/jacoco/*.exec")
+    }
+}
+
+task jacocoFullReport(type: JacocoReport, group: 'Coverage reports') {
+    final projects = subprojects
+
+    // Depend on the jacocoReport task created before
+    dependsOn(projects.jacocoReport)
+
+    // Aggregate the source files
+    final source = files(projects.jacocoReport.sourceDirectories)
+    additionalSourceDirs.setFrom source
+    sourceDirectories.setFrom source
+
+    // Aggregate the class files
+    classDirectories.setFrom files(projects.jacocoReport.classDirectories)
+
+    // Aggregate the execution data
+    executionData.setFrom files(projects.jacocoReport.executionData)
+
+    // Type of report to generate
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+
+    // In case the module does not have any tests, it will not contain any execution data i.e *.exec files
+    // Those need to be filtered out first
+    doFirst {
+        //noinspection GroovyAssignabilityCheck
+        executionData.setFrom files(executionData.findAll { it.exists() })
+    }
+
+    // Print the location of reports at the end
+    doLast {
+        println("Reports generated at ${rootProject.buildDir}/reports/jacoco/jacocoFullReport")
+    }
+}

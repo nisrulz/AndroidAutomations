@@ -71,17 +71,19 @@ before_script:
   - echo "org.gradle.console=plain" >> $HOME/.gradle/gradle.properties
 
 stages:
-  - name: test_and_build
+  - name: build_test_coverage
   - name: deploy
     if: (type != pull_request) AND (branch = master) AND (tag IS present)
 
 jobs:
   fast_finish: true
   include:
-    - stage: test_and_build
-      name: "Building codebase and running unit tests"
+    # Build, Test & Code Coverage
+    - stage: build_test_coverage
+      name: "Build, execute unit test and generate code coverage for the codebase"
       script:
-        - ./gradlew -q build test
+        - ./gradlew -q build testDebugUnitTest jacocoFullReport
+    # Deploy
     - stage: deploy
       name: "Assemble release APK"
       script:
