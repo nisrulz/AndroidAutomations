@@ -40,8 +40,13 @@ before_install:
   - mkdir -p $HOME/.android && touch $HOME/.android/repositories.cfg
 
 install:
+  # Install android sdk and build tools
   - yes | "${ANDROID_HOME}/tools/bin/sdkmanager" --sdk_root=${ANDROID_HOME} "platforms;android-${ANDROID_SDK_VERS}" > /dev/null
   - yes | "${ANDROID_HOME}/tools/bin/sdkmanager" --sdk_root=${ANDROID_HOME} "build-tools;${ANDROID_BUILD_TOOLS_VERS}" > /dev/null
+  # Setup dependencies for executing fastlane
+  - rvm install 2.6.3
+  - bundle install
+  - bundle exec fastlane install_plugins
 
 # --------------------------------- Cache ----------------------------------
 before_cache:
@@ -80,14 +85,14 @@ jobs:
   include:
     # Build, Test & Code Coverage
     - stage: build_test_coverage
-      name: "Build, execute unit test and generate code coverage for the codebase"
+      name: "Build, execute unit tests and generate code coverage for the codebase"
       script:
-        - ./gradlew -q build testDebugUnitTest jacocoFullReport
+        - bundle exec fastlane run_ci
     # Deploy
     - stage: deploy
       name: "Assemble release APK"
       script:
-        - ./gradlew -q assembleRelease
+        - bundle exec fastlane assemble_release_apk
 
 # ------------------------ Deploy to Github Releases ------------------------
 before_deploy:
