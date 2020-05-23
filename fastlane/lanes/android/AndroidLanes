@@ -1,19 +1,29 @@
 # ============= Lanes ================
 
 platform :android do
-  desc "Runs all the tests"
-  lane :test do
-    gradle(task: "test")
+  desc "Runs all the unit tests"
+  lane :test_project do
+    gradle(task: "-q testDebugUnitTest")
+  end
+
+  desc "Build the project"
+  lane :build_project do
+    gradle(task: "-q build")
   end
 
   desc "Generate full code coverage report"
-  lane :coverage do
-    gradle(task: "jacocoFullReport")
+  lane :generate_coverage_report do
+    gradle(task: "-q jacocoFullReport")
+  end
+
+  desc "Run lint on codebase"
+  lane :lint do
+    gradle(task: "-q ktlintCheck lintDebug")
   end
 
   desc "Submit a new Beta Build to Crashlytics Beta"
   lane :beta do
-    gradle(task: "clean assembleRelease")
+    gradle(task: "-q clean assembleRelease")
     crashlytics
 
     # sh "your_script.sh"
@@ -22,8 +32,13 @@ platform :android do
 
   desc "Deploy a new version to the Google Play"
   lane :deploy do
-    gradle(task: "clean assembleRelease")
     upload_to_play_store
+  end
+
+  desc "Assemble a new release APK"
+  lane :assemble_release_apk do
+    gradle(task: "-q clean assembleRelease")
+    puts "APK generated at ./app/build/outputs/apk/release/"
   end
 end
 
