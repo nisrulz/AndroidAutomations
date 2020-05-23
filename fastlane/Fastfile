@@ -13,6 +13,9 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
+# Opt out of sending analytics data about usage to fastlane servers
+opt_out_usage
+
 default_platform(:android)
 
 platform :android do
