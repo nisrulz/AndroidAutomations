@@ -46,7 +46,7 @@ install:
   # Setup dependencies for executing fastlane
   - rvm install 2.6.3
   - bundle install
-  - fastlane install_plugins
+  - bundle exec fastlane install_plugins
 
 # --------------------------------- Cache ----------------------------------
 before_cache:
