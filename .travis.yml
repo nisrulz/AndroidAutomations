@@ -43,7 +43,8 @@ install:
   # Install android sdk and build tools
   - yes | "${ANDROID_HOME}/tools/bin/sdkmanager" --sdk_root=${ANDROID_HOME} "platforms;android-${ANDROID_SDK_VERS}" > /dev/null
   - yes | "${ANDROID_HOME}/tools/bin/sdkmanager" --sdk_root=${ANDROID_HOME} "build-tools;${ANDROID_BUILD_TOOLS_VERS}" > /dev/null
-  # Install fastlane
+  # Setup dependencies for executing fastlane
+  - rvm install 2.6.3
   - bundle install
   - fastlane install_plugins
 
