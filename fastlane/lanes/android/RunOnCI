@@ -4,7 +4,9 @@ platform :android do
   desc "Entry point lane for all CI related operations"
   lane :run_ci do
     # Only execute next instructions if running on CI
-    # next unless is_ci?
+    next unless is_ci?
+
+    # Steps to perform
     build_project
     test_project
     generate_coverage_report
