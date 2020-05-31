@@ -1,5 +1,6 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 apply from: "$rootProject.projectDir/configs/jacoco.gradle"
+apply from: "$rootProject.projectDir/configs/jacocoOutputToConsole.gradle"
 apply from: "$rootProject.projectDir/configs/ktlint.gradle"
 
 buildscript {

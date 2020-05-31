@@ -112,6 +112,9 @@ task jacocoFullReport(type: JacocoReport, group: 'Coverage reports') {
 
     // Print the location of reports at the end
     doLast {
-        println("Reports generated at ${rootProject.buildDir}/reports/jacoco/jacocoFullReport")
+        println("\n======================= Reports generated at =======================\n")
+        println("XML:  ./build/reports/jacoco/jacocoFullReport/jacocoFullReport.xml")
+        println("HTML: ./build/reports/jacoco/jacocoFullReport/html/index.html")
+        println("\n====================================================================\n")
     }
 }
