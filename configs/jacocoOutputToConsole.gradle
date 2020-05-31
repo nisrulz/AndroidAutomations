@@ -1,0 +1,32 @@
+task jacocoOutputToConsole(type: JacocoReport, dependsOn: jacocoFullReport, group: 'Coverage reports') {
+    def reportFile = new File("${rootProject.buildDir}/reports/jacoco/jacocoFullReport/html/index.html")
+
+    if (!reportFile.exists() || !reportFile.canRead()) {
+        println "[JacocoOutputToConsole] Skipped due to missing report file."
+        return
+    }
+
+    reportFile.withReader('UTF-8') { reader ->
+        final html = getParser().parseText(reader.readLine())
+        final totalRow = html.body.table.tfoot.tr
+        final instructionMissed = totalRow.td[1]
+        final instructionRatio = totalRow.td[2]
+        final branchMissed = totalRow.td[3]
+        final branchRatio = totalRow.td[4]
+
+        // Print the location of reports at the end
+        println("\n======================= JacocoOutputToConsole =======================\n")
+        println("Instructions  ${instructionRatio}  (Missed ${instructionMissed})")
+        println("Branches      ${branchRatio}  (Missed ${branchMissed})")
+        println("\n=====================================================================\n")
+    }
+}
+
+static XmlSlurper getParser() {
+    final parser = new XmlSlurper()
+    parser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false)
+    parser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
+    return parser
+}
+
+
