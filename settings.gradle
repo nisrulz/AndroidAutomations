@@ -1,2 +1,3 @@
+include ':testingAndroidLib'
 include ':app'
 rootProject.name = "AndroidAutomations"

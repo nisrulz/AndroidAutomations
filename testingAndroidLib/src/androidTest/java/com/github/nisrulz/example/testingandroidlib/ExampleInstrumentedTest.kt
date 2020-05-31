@@ -1,4 +1,4 @@
-package com.github.nisrulz.example.androidautomations
+package com.github.nisrulz.example.testingandroidlib
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -17,6 +17,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.github.nisrulz.example.androidautomations", appContext.packageName)
+        assertEquals("com.github.nisrulz.example.testingandroidlib.test", appContext.packageName)
     }
 }
