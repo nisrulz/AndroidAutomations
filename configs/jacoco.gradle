@@ -57,7 +57,7 @@ configure(subprojects) { project ->
         classDirectories.setFrom(files([classFileTree]))
 
         // Collect source files
-        final kotlinSrc = "${project.buildDir}/src/main/kotlin"
+        final kotlinSrc = "${project.projectDir}/src/main/kotlin"
         final javaSrc = "$project.projectDir/src/main/java"
         final combinedSrc = files([javaSrc, kotlinSrc])
         sourceDirectories.setFrom(combinedSrc)
