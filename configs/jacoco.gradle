@@ -25,24 +25,13 @@ allprojects {
     }
 }
 
-subprojects {
-    afterEvaluate {
-        android {
-            buildTypes {
-                debug {
-                    // Should run on only CI
-                    testCoverageEnabled = true
-                }
-            }
-        }
-    }
-}
-
 // configure() method takes a list as an argument and applies the configuration to the projects in this list.
-configure(subprojects) { subproject ->
+configure(subprojects) { project ->
 
+    final productFlavorName = ""
     final buildTypeName = "debug"
-    final testTask = "test${buildTypeName.capitalize()}UnitTest"
+    final sourcePath = "${productFlavorName}${buildTypeName.capitalize()}"
+    final testTask = "test${sourcePath.capitalize()}UnitTest"
 
     // Task to generate Jacoco report, depends on testDebugUnitTest task
     task jacocoReport(type: JacocoReport, dependsOn: testTask) {
@@ -52,31 +41,29 @@ configure(subprojects) { subproject ->
         // Define what to exclude from coverage report
         // UI, "noise", generated classes, platform classes, etc.
         final fileFilter = [
-            '**/R.class',
-            '**/R$*.class',
-            '**/*$ViewInjector*.*',
-            '**/BuildConfig.*',
-            '**/Manifest*.*',
-            '**/*Test*.*',
-            '**/*Fragment*.*',
-            '**/*Activity*.*',
-            'android/**/*.*',
+                '**/R.class',
+                '**/R$*.class',
+                '**/*$ViewInjector*.*',
+                '**/BuildConfig.*',
+                '**/Manifest*.*',
+                'android/**/*.*',
+                '**/*Test*.*',
         ]
 
         // Collect class files
-        final kotlinClassTree = "/tmp/kotlin-classes/$buildTypeName/**"
-        final javaClassTree = "/intermediates/javac/$buildTypeName/classes/**"
-        final combinedClassTree = fileTree(dir: "${subproject.buildDir}", excludes: fileFilter, includes: [javaClassTree, kotlinClassTree])
-        classDirectories.setFrom files(combinedClassTree)
+        final javaClassFiles = fileTree(dir: "${project.buildDir}/intermediates/javac/${sourcePath}/classes", excludes: fileFilter)
+        final kotlinClassFiles = fileTree(dir: "${project.buildDir}/tmp/kotlin-classes/${sourcePath}", excludes: fileFilter)
+        final classFileTree = javaClassFiles + kotlinClassFiles
+        classDirectories.setFrom(files([classFileTree]))
 
         // Collect source files
-        final kotlinSrc = "/src/main/kotlin/**"
-        final javaSrc = "/src/main/java/**"
-        final combinedSrc = fileTree(dir: "${subproject.projectDir}", excludes: fileFilter, includes: [javaSrc, kotlinSrc])
-        sourceDirectories.setFrom files(combinedSrc)
+        final kotlinSrc = "${project.buildDir}/src/main/kotlin"
+        final javaSrc = "$project.projectDir/src/main/java"
+        final combinedSrc = files([javaSrc, kotlinSrc])
+        sourceDirectories.setFrom(combinedSrc)
 
         // Collect all *.exec files
-        executionData.setFrom fileTree(subproject.buildDir).include("/jacoco/*.exec")
+        executionData.setFrom fileTree(project.buildDir).include("/jacoco/*.exec")
     }
 }
 
