@@ -23,10 +23,16 @@ platform :android do
 
     # Show notification
     notification(
-      title:"AndroidAutomations", 
-      subtitle: "show_notification lane", 
-      message: "Completed"
-      )
+      title: "AndroidAutomations",
+      subtitle: "show_notification lane",
+      message: "Completed",
+    )
+  end
+
+  desc "Execute a shell script"
+  lane :run_shell_script do
+    SCRIPT_DIR = "../scripts/"
+    sh SCRIPT_DIR + "echoHelloWorld.sh"
   end
 
   desc "Run lint on codebase"

@@ -16,6 +16,7 @@
 # Opt out of sending analytics data about usage to fastlane servers
 opt_out_usage
 
-import "./lanes/android/RunOnCI"
+import "./lanes/AndroidLanes"
+import "./lanes/RunOnCI"
 
 default_platform(:android)
