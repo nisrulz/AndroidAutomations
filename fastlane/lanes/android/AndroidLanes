@@ -16,6 +16,19 @@ platform :android do
     gradle(task: "-q jacocoFullReport")
   end
 
+  desc "Display a notification"
+  lane :show_notification do
+    # Only execute next instructions if not running on CI
+    next unless !is_ci
+
+    # Show notification
+    notification(
+      title:"AndroidAutomations", 
+      subtitle: "show_notification lane", 
+      message: "Completed"
+      )
+  end
+
   desc "Run lint on codebase"
   lane :lint do
     gradle(task: "-q ktlintCheck lintDebug")
