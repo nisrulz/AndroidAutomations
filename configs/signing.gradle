@@ -1,8 +1,8 @@
-def isRunningOnTravis = System.getenv("CI") == "true"
+def isRunningOnCI = System.getenv("CI") == "true"
 
 def keystorePropertiesFile = rootProject.file("keystore/keystore.properties")
 
-if (isRunningOnTravis) {
+if (isRunningOnCI) {
     if (keystorePropertiesFile.exists()) {
         // Load the properties
         def keystoreProperties = new Properties()
