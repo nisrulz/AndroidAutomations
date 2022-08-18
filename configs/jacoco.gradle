@@ -1,8 +1,8 @@
 buildscript {
-    ext.jacoco_version = "0.8.5"
+    ext.jacoco_version = "0.8.6"
 
     repositories {
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
