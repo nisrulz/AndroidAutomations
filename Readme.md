@@ -1,7 +1,8 @@
 # Android Automations
 
-Build Status: [![Build Status](https://travis-ci.org/nisrulz/AndroidAutomations.svg?branch=master)](https://travis-ci.org/nisrulz/AndroidAutomations)
-
+Build Status: 
+[![Validate Gradle Wrapper](https://github.com/nisrulz/AndroidAutomations/actions/workflows/gradle-wrapper-validation.yml/badge.svg?branch=master)](https://github.com/nisrulz/AndroidAutomations/actions/workflows/gradle-wrapper-validation.yml)
+[![Build and Release](https://github.com/nisrulz/AndroidAutomations/actions/workflows/build-and-release.yml/badge.svg?branch=master)](https://github.com/nisrulz/AndroidAutomations/actions/workflows/build-and-release.yml)[![Greetings](https://github.com/nisrulz/AndroidAutomations/actions/workflows/greetings.yml/badge.svg?branch=master)](https://github.com/nisrulz/AndroidAutomations/actions/workflows/greetings.yml)
 An android example app repository to demonstrate various automations possible via using Travis CI.
 
 ### Contribute
